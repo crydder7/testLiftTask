@@ -85,8 +85,6 @@ class ViewController: UIViewController {
         }
         floors.reverse()
         
-//        floors.last?.addConstraint(NSLayoutConstraint(item: self, attribute: .bottom, relatedBy: .equal, toItem: self.view.safeAreaLayoutGuide, attribute: .bottom, multiplier: 1, constant: 0))
-        
     }
     
     func createLift(){

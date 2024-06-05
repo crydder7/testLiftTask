@@ -1,6 +1,8 @@
 import Foundation
 import UIKit
 
+// View of lift, that we downloaded from JSON, we can use it for animation
+
 class LiftView: UIView{
     
     let modelOfLift: Lift?
@@ -14,8 +16,9 @@ class LiftView: UIView{
         self.view = view
         self.mine = mineOfFirstFloor
         self.numOfLevels = numOfLevels
-        let height = Int(self.view.frame.height)/numOfLevels
-        super.init(frame: CGRect(x: 0, y: 0, width: Int(Double(height) * 0.75), height: height))
+        let height = self.mine.bounds.height
+        let width = self.mine.bounds.height * 0.75
+        super.init(frame: CGRect(x: 0, y: 0, width: width, height: height))
         self.center = mineOfFirstFloor.center
         self.backgroundColor = .black
         self.layer.borderColor = .init(red: 200, green: 200, blue: 200, alpha: 0.75)

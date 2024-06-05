@@ -3,19 +3,19 @@ import UIKit
 
 class Level:UIView{
     static var levels = [Level]()
-    var numOfLevels:Int
+    var numOfLevels: Int
     let elevatorPlace = UIView()
     let button = UIButton()
-    var house : UIView
+    var house: UIView
     static let colorsOfLevel:[UIColor] = [.white, .lightGray, .cyan, .green, .blue, .yellow, .purple]
     
     init(numOfLevels:Int, house: UIView) {
         let width = Int(house.frame.width)
-        let height = Int(house.frame.height)/numOfLevels
+        let height = Int(house.frame.height - house.safeAreaInsets.top - house.safeAreaInsets.bottom)/numOfLevels
         self.numOfLevels = numOfLevels
         self.house = house
-        super.init(frame: CGRect(x: 0, y: 0, width: width, height: height))
-        self.translatesAutoresizingMaskIntoConstraints = false
+        super.init(frame: CGRect(x: 0, y: 0+Int(house.safeAreaInsets.top), width: width, height: height))
+        self.translatesAutoresizingMaskIntoConstraints = true
         
         self.backgroundColor = Level.colorsOfLevel.randomElement()
         self.center.x = house.center.x

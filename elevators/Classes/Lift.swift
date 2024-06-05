@@ -1,5 +1,6 @@
 import Foundation
 
+// Class for download lift information from JSON (It's a model of lift)
 class Lift : Decodable{
     
     let id : Int?
