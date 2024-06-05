@@ -5,10 +5,11 @@ import UIKit
 
 class LiftView: UIView{
     
-    let modelOfLift: Lift?
+    let modelOfLift : Lift?
     let numOfLevels : Int
     let mine: UIView
     let view : UIView
+    public var queue = [Int]()
     public var currentLevel = 0
     
     init(modelOfLift: Lift?, numOfLevels: Int, view:UIView, mineOfFirstFloor: UIView) {

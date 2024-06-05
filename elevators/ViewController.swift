@@ -7,12 +7,11 @@ class ViewController: UIViewController {
     //MARK: Lifts arrays
     var liftsArray = [Lift]() // Data from JSON(Model of lifts)
     var liftViews = [LiftView]() // All lifts as Views
-    //var freeLifts = [LiftView]() // Lift, there are free in the moment as Views
+    var freeLifts = [LiftView]() // Lift, there are free in the moment as Views
     
-    
-    var floors = [Level]()
+    var floors = [Level]() // All of floors in house
     var waitingLevels = [Int]() // Numver of floors, there are already waiting lif(there not available to call more lifts)
-    var numOfLevels = 5
+    var numOfLevels = Int()
     
     override func viewDidLoad() {
         self.view.translatesAutoresizingMaskIntoConstraints = false
@@ -95,7 +94,7 @@ class ViewController: UIViewController {
         }
         
         for i in liftViews{
-            //freeLifts.append(i)
+            freeLifts.append(i)
             view.addSubview(i)
         }
     }
@@ -103,9 +102,6 @@ class ViewController: UIViewController {
     //MARK: Action for button
     @objc func callLift(sender:UIButton){
         
-        
-//        guard !freeLifts.isEmpty else { return }
-//        
         var numOfFloor = 0
         for i in 0..<floors.count{
             if sender == floors[i].button{
@@ -119,36 +115,69 @@ class ViewController: UIViewController {
         } else { return }
         
         
-//
-//        guard !waitingLevels.contains(numOfFloor) else { return }
-//        waitingLevels.append(numOfFloor)
-//        sender.backgroundColor = .green
-//        
-//        var lift = freeLifts.randomElement()!
-//        var min = Int.max
-//        for i in freeLifts{
-//            if abs(i.currentLevel - numOfFloor) < min{
-//                min = abs(i.currentLevel - numOfFloor)
-//                lift = i
-//            }
-//        }
-//        
-//        let duration = abs((lift.currentLevel - numOfFloor)) * 4
-//        
-//        UIView.animate(withDuration: TimeInterval(duration)) {
-//            lift.center.y = self.floors[numOfFloor].center.y
-//            guard let indexOfLift = self.freeLifts.firstIndex(of: lift) else { return }
-//            self.freeLifts.remove(at: indexOfLift)
-//        } completion: { final in
-//            lift.currentLevel = numOfFloor
-//            guard let indexOfFloor = self.waitingLevels.firstIndex(of: numOfFloor) else { return }
-//            self.freeLifts.append(lift)
-//            self.waitingLevels.remove(at: indexOfFloor)
-//            sender.backgroundColor = .red
-//        }
-
+        
+        var lift = liftViews.randomElement()!
+        var min = Int.max
+        for i in liftViews{
+            var levelOfLift = 0
+            if i.queue.isEmpty{
+                levelOfLift = i.currentLevel
+            } else{
+                levelOfLift = i.queue.last!
+            }
+            if abs(levelOfLift - numOfFloor) < min{
+                lift = i
+                min = abs(levelOfLift - numOfFloor)
+            }
+        }
+        if !freeLifts.isEmpty{
+            for i in freeLifts{
+                var levelOfLift = 0
+                if i.queue.isEmpty{
+                    levelOfLift = i.currentLevel
+                } else{
+                    levelOfLift = i.queue.last!
+                }
+                if abs(levelOfLift - numOfFloor) <= min{
+                    lift = i
+                    min = abs(levelOfLift - numOfFloor)
+                }
+            }
+        }
+        
+        if lift.queue.isEmpty{
+            guard let indexOfLift = self.freeLifts.firstIndex(of: lift) else { return }
+            self.freeLifts.remove(at: indexOfLift)
+            lift.queue.append(numOfFloor)
+            moveLift(lift: lift)
+        } else {
+            lift.queue.append(numOfFloor)
+        }
+        
     }
     
+    //MARK: Lift moving function
+    func moveLift(lift:LiftView){
+        guard let numOfFloor = lift.queue.first else { return }
+        print("queue: \(lift.queue)")
+        let duration = abs((lift.currentLevel - numOfFloor)) * 4
+        print("duration: \(duration)")
+        UIView.animate(withDuration: TimeInterval(duration)) {
+            lift.center.y = self.floors[numOfFloor].center.y
+        } completion: { final in
+            lift.currentLevel = numOfFloor
+            guard let indexOfFloor = self.waitingLevels.firstIndex(of: numOfFloor) else { return }
+            self.waitingLevels.remove(at: indexOfFloor)
+            self.floors[numOfFloor].button.backgroundColor = .red
+            lift.queue.removeFirst()
+            if lift.queue.isEmpty{
+                self.freeLifts.append(lift)
+            } else{
+                self.moveLift(lift: lift)
+            }
+        }
+        
+    }
     
     
 }
