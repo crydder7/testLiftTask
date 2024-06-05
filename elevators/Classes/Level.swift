@@ -1,6 +1,8 @@
 import Foundation
 import UIKit
 
+// Class of one floor in house
+
 class Level:UIView{
     static var levels = [Level]()
     var numOfLevels: Int
@@ -34,6 +36,8 @@ class Level:UIView{
         button.frame = CGRect(x: 0, y: 0, width: height/7, height: height/7)
         button.layer.cornerRadius = 10
         button.backgroundColor = .red
+        button.layer.borderWidth = 1
+        button.layer.borderColor = .init(red: 0, green: 0, blue: 0, alpha: 1)
         button.center.x = elevatorPlace.center.x + 75
         button.center.y = elevatorPlace.center.y
         self.addSubview(button)

@@ -7,7 +7,7 @@ class ViewController: UIViewController {
     //MARK: Lifts arrays
     var liftsArray = [Lift]() // Data from JSON(Model of lifts)
     var liftViews = [LiftView]() // All lifts as Views
-    var freeLifts = [LiftView]() // Lift, there are free in the moment as Views
+    //var freeLifts = [LiftView]() // Lift, there are free in the moment as Views
     
     
     var floors = [Level]()
@@ -95,7 +95,7 @@ class ViewController: UIViewController {
         }
         
         for i in liftViews{
-            freeLifts.append(i)
+            //freeLifts.append(i)
             view.addSubview(i)
         }
     }
@@ -103,8 +103,9 @@ class ViewController: UIViewController {
     //MARK: Action for button
     @objc func callLift(sender:UIButton){
         
-        guard !freeLifts.isEmpty else { return }
         
+//        guard !freeLifts.isEmpty else { return }
+//        
         var numOfFloor = 0
         for i in 0..<floors.count{
             if sender == floors[i].button{
@@ -112,31 +113,43 @@ class ViewController: UIViewController {
             }
         }
         
-        guard !waitingLevels.contains(numOfFloor) else { return }
-        waitingLevels.append(numOfFloor)
+        if !self.waitingLevels.contains(numOfFloor){
+            self.waitingLevels.append(numOfFloor)
+            sender.backgroundColor = .green
+        } else { return }
         
-        var lift = freeLifts.randomElement()!
-        var min = Int.max
-        for i in freeLifts{
-            if abs(i.currentLevel - numOfFloor) < min{
-                min = abs(i.currentLevel - numOfFloor)
-                lift = i
-            }
-        }
         
-        let duration = abs((lift.currentLevel - numOfFloor)) * 4
-        
-        UIView.animate(withDuration: TimeInterval(duration)) {
-            lift.center.y = self.floors[numOfFloor].center.y
-            guard let indexOfLift = self.freeLifts.firstIndex(of: lift) else { return }
-            self.freeLifts.remove(at: indexOfLift)
-        } completion: { final in
-            lift.currentLevel = numOfFloor
-            guard let indexOfFloor = self.waitingLevels.firstIndex(of: numOfFloor) else { return }
-            self.freeLifts.append(lift)
-            self.waitingLevels.remove(at: indexOfFloor)
-        }
+//
+//        guard !waitingLevels.contains(numOfFloor) else { return }
+//        waitingLevels.append(numOfFloor)
+//        sender.backgroundColor = .green
+//        
+//        var lift = freeLifts.randomElement()!
+//        var min = Int.max
+//        for i in freeLifts{
+//            if abs(i.currentLevel - numOfFloor) < min{
+//                min = abs(i.currentLevel - numOfFloor)
+//                lift = i
+//            }
+//        }
+//        
+//        let duration = abs((lift.currentLevel - numOfFloor)) * 4
+//        
+//        UIView.animate(withDuration: TimeInterval(duration)) {
+//            lift.center.y = self.floors[numOfFloor].center.y
+//            guard let indexOfLift = self.freeLifts.firstIndex(of: lift) else { return }
+//            self.freeLifts.remove(at: indexOfLift)
+//        } completion: { final in
+//            lift.currentLevel = numOfFloor
+//            guard let indexOfFloor = self.waitingLevels.firstIndex(of: numOfFloor) else { return }
+//            self.freeLifts.append(lift)
+//            self.waitingLevels.remove(at: indexOfFloor)
+//            sender.backgroundColor = .red
+//        }
 
     }
+    
+    
+    
 }
 
