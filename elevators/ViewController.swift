@@ -12,6 +12,7 @@ class ViewController: UIViewController {
     var floors = [Level]() // All of floors in house
     var waitingLevels = [Int]() // Numver of floors, there are already waiting lif(there not available to call more lifts)
     var numOfLevels = Int()
+    var timeOpenClose = 0
     
     override func viewDidLoad() {
         self.view.translatesAutoresizingMaskIntoConstraints = false
@@ -22,9 +23,11 @@ class ViewController: UIViewController {
             let liftsInfo = LiftData.init(timeToElevate: data!.timeToElevate, timeOpenCloseDoor: data!.timeOpenCloseDoor, houseLevels: data!.houseLevels, lifts: data!.lifts)
             let num = liftsInfo.houseLevels
             let fl = liftsInfo.lifts
+            let time = liftsInfo.timeOpenCloseDoor
             
             DispatchQueue.main.async {
                 self.numOfLevels = num ?? 6
+                self.timeOpenClose = time ?? 3
                 if let floors = fl{
                     self.liftsArray = floors
                 }
@@ -131,7 +134,7 @@ class ViewController: UIViewController {
        }
        if !freeLifts.isEmpty{
            for i in freeLifts{
-               var levelOfLift = i.currentLevel
+               let levelOfLift = i.currentLevel
                if abs(levelOfLift - numOfFloor) <= min{
                    lift = i
                    min = abs(levelOfLift - numOfFloor)
@@ -158,6 +161,7 @@ class ViewController: UIViewController {
         UIView.animate(withDuration: TimeInterval(duration)) {
             lift.center.y = self.floors[numOfFloor].center.y
         } completion: { final in
+            lift.openDoors(duration: TimeInterval(self.timeOpenClose))
             lift.currentLevel = numOfFloor
             guard let indexOfFloor = self.waitingLevels.firstIndex(of: numOfFloor) else { return }
             self.waitingLevels.remove(at: indexOfFloor)
