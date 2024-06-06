@@ -101,7 +101,7 @@ class ViewController: UIViewController {
     
     //MARK: Action for button
     @objc func callLift(sender:UIButton){
-        
+        guard !liftViews.isEmpty else { return }
         var numOfFloor = 0
         for i in 0..<floors.count{
             if sender == floors[i].button{
@@ -114,36 +114,30 @@ class ViewController: UIViewController {
             sender.backgroundColor = .green
         } else { return }
         
-        
-        
         var lift = liftViews.randomElement()!
         var min = Int.max
         for i in liftViews{
-            var levelOfLift = 0
-            if i.queue.isEmpty{
-                levelOfLift = i.currentLevel
-            } else{
-                levelOfLift = i.queue.last!
-            }
-            if abs(levelOfLift - numOfFloor) < min{
-                lift = i
-                min = abs(levelOfLift - numOfFloor)
-            }
-        }
-        if !freeLifts.isEmpty{
-            for i in freeLifts{
-                var levelOfLift = 0
-                if i.queue.isEmpty{
-                    levelOfLift = i.currentLevel
-                } else{
-                    levelOfLift = i.queue.last!
-                }
-                if abs(levelOfLift - numOfFloor) <= min{
-                    lift = i
-                    min = abs(levelOfLift - numOfFloor)
-                }
-            }
-        }
+           var levelOfLift = 0
+           if i.queue.isEmpty{
+               levelOfLift = i.currentLevel
+           } else{
+               levelOfLift += i.queue.last!
+               
+           }
+           if abs(levelOfLift - numOfFloor) < min{
+               lift = i
+               min = abs(levelOfLift - numOfFloor)
+           }
+       }
+       if !freeLifts.isEmpty{
+           for i in freeLifts{
+               var levelOfLift = i.currentLevel
+               if abs(levelOfLift - numOfFloor) <= min{
+                   lift = i
+                   min = abs(levelOfLift - numOfFloor)
+               }
+           }
+       }
         
         if lift.queue.isEmpty{
             guard let indexOfLift = self.freeLifts.firstIndex(of: lift) else { return }
@@ -156,12 +150,11 @@ class ViewController: UIViewController {
         
     }
     
+    
     //MARK: Lift moving function
     func moveLift(lift:LiftView){
         guard let numOfFloor = lift.queue.first else { return }
-        print("queue: \(lift.queue)")
         let duration = abs((lift.currentLevel - numOfFloor)) * 4
-        print("duration: \(duration)")
         UIView.animate(withDuration: TimeInterval(duration)) {
             lift.center.y = self.floors[numOfFloor].center.y
         } completion: { final in
@@ -176,9 +169,7 @@ class ViewController: UIViewController {
                 self.moveLift(lift: lift)
             }
         }
-        
     }
-    
     
 }
 

@@ -8,6 +8,8 @@ class LiftView: UIView{
     let modelOfLift : Lift?
     let numOfLevels : Int
     let mine: UIView
+    var width = 0
+    var height = 0
     let view : UIView
     public var queue = [Int]()
     public var currentLevel = 0
@@ -17,9 +19,10 @@ class LiftView: UIView{
         self.view = view
         self.mine = mineOfFirstFloor
         self.numOfLevels = numOfLevels
-        let height = self.mine.bounds.height
-        let width = self.mine.bounds.height * 0.75
+        self.height = Int(self.mine.bounds.height)
+        self.width = Int(self.mine.bounds.height * 0.75)
         super.init(frame: CGRect(x: 0, y: 0, width: width, height: height))
+        self.translatesAutoresizingMaskIntoConstraints = false
         self.center = mineOfFirstFloor.center
         self.backgroundColor = .black
         self.layer.borderColor = .init(red: 200, green: 200, blue: 200, alpha: 0.75)

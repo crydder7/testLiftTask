@@ -9,11 +9,11 @@ class Level:UIView{
     let elevatorPlace = UIView()
     let button = UIButton()
     var house: UIView
-    static let colorsOfLevel:[UIColor] = [.white, .lightGray, .cyan, .green, .blue, .yellow, .purple]
+    static let colorsOfLevel:[UIColor] = [.white, .lightGray]
     
     init(numOfLevels:Int, house: UIView) {
-        let width = Int(house.frame.width)
-        let height = Int(house.frame.height - house.safeAreaInsets.top - house.safeAreaInsets.bottom)/numOfLevels
+        let width = Int(house.bounds.width)
+        let height = Int(house.bounds.height - house.safeAreaInsets.top - house.safeAreaInsets.bottom)/numOfLevels
         self.numOfLevels = numOfLevels
         self.house = house
         super.init(frame: CGRect(x: 0, y: 0+Int(house.safeAreaInsets.top), width: width, height: height))
