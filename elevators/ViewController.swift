@@ -158,19 +158,32 @@ class ViewController: UIViewController {
     func moveLift(lift:LiftView){
         guard let numOfFloor = lift.queue.first else { return }
         let duration = abs((lift.currentLevel - numOfFloor)) * 4
+        let originR = lift.rightDoor.frame.origin.x
+        let originL = lift.leftDoor.frame.origin.x
         UIView.animate(withDuration: TimeInterval(duration)) {
             lift.center.y = self.floors[numOfFloor].center.y
         } completion: { final in
-            lift.openDoors(duration: TimeInterval(self.timeOpenClose))
-            lift.currentLevel = numOfFloor
-            guard let indexOfFloor = self.waitingLevels.firstIndex(of: numOfFloor) else { return }
-            self.waitingLevels.remove(at: indexOfFloor)
-            self.floors[numOfFloor].button.backgroundColor = .red
-            lift.queue.removeFirst()
-            if lift.queue.isEmpty{
-                self.freeLifts.append(lift)
-            } else{
-                self.moveLift(lift: lift)
+            UIView.animate(withDuration: TimeInterval(self.timeOpenClose)) {
+                lift.leftDoor.frame.origin.x = -lift.leftDoor.frame.width
+                lift.rightDoor.frame.origin.x = lift.frame.width
+            } completion: { final in
+                UIView.animate(withDuration: TimeInterval(self.timeOpenClose)) {
+                    lift.leftDoor.frame.origin.x = originL
+                    lift.rightDoor.frame.origin.x = originR
+                }
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1.7) {
+                    lift.currentLevel = numOfFloor
+                    guard let indexOfFloor = self.waitingLevels.firstIndex(of: numOfFloor) else { return }
+                    self.waitingLevels.remove(at: indexOfFloor)
+                    self.floors[numOfFloor].button.backgroundColor = .red
+                    lift.queue.removeFirst()
+                    if lift.queue.isEmpty{
+                        self.freeLifts.append(lift)
+                    } else{
+                        self.moveLift(lift: lift)
+                    }
+                }
+                
             }
         }
     }

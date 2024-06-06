@@ -14,8 +14,8 @@ class LiftView: UIView{
     public var queue = [Int]()
     public var currentLevel = 0
     
-    private var leftDoor = UIView()
-    private var rightDoor =  UIView()
+    public var leftDoor = UIView()
+    public var rightDoor =  UIView()
     
     init(modelOfLift: Lift?, numOfLevels: Int, view:UIView, mineOfFirstFloor: UIView) {
         self.modelOfLift = modelOfLift
