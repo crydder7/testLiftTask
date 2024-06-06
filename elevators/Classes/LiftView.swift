@@ -52,23 +52,9 @@ class LiftView: UIView{
             }
         }
     }
-//    func openDoors(time:Int){
-//        self.backgroundColor = .lightGray
-//        let leftDoor = UIView()
-//        let rightDoor = UIView()
-//        leftDoor.backgroundColor = .black
-//        rightDoor.backgroundColor = .black
-//        leftDoor.frame = CGRect(x: 0, y: 0, width: width/2, height: height)
-//        rightDoor.frame = CGRect(x: 0, y: 0, width: width/2, height: height)
-//        leftDoor.center = self.center
-//        rightDoor.center = self.center
-//        leftDoor.center.x = self.center.x - leftDoor.frame.width/2
-//        rightDoor.center.x = self.center.x + rightDoor.frame.width/2
-//        self.addSubview(leftDoor)
-//        self.addSubview(rightDoor)
-//    }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
 }
